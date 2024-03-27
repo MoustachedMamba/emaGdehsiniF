@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://tadeg57xo3an"]
+
+[ext_resource type="Material" uid="uid://chcqdfoj1unrr" path="res://Scenes/Mirror/MirrorMaterial.tres" id="1_csy3y"]
+[ext_resource type="Script" path="res://Scenes/Mirror/Mirror.gd" id="1_wsvv7"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_p1o6f"]
+size = Vector2(2, 2)
+
+[node name="MirrorContainer" type="Node3D"]
+script = ExtResource("1_wsvv7")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+render_target_update_mode = 3
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+keep_aspect = 0
+cull_mask = 1048571
+projection = 2
+size = 3.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_p1o6f")
+surface_material_override/0 = ExtResource("1_csy3y")

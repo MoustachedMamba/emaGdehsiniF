@@ -1,14 +1,45 @@
-[gd_scene load_steps=4 format=3 uid="uid://bst8nb7f5gmjn"]
+[gd_scene load_steps=10 format=3 uid="uid://bst8nb7f5gmjn"]
 
 [ext_resource type="PackedScene" uid="uid://bhdkknpe3vfkv" path="res://Scenes/Player/Player.tscn" id="1_paj5k"]
+[ext_resource type="PackedScene" uid="uid://tadeg57xo3an" path="res://Scenes/Mirror/MirrorContainer.tscn" id="2_6lhiy"]
+[ext_resource type="Shader" path="res://Scenes/Mirror/Mirror.gdshader" id="3_qg3gq"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cpdjt"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_rx155"]
+sky_material = SubResource("ProceduralSkyMaterial_cpdjt")
+
+[sub_resource type="Environment" id="Environment_3m8nd"]
+background_mode = 2
+sky = SubResource("Sky_rx155")
+tonemap_mode = 2
+glow_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_n0n85"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_v0inr"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ws1ww"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_qg3gq")
+shader_parameter/tint = Color(0.98, 0.98, 0.98, 1)
+
 [node name="ControllerTestMap" type="Node3D"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3m8nd")
+
 [node name="Player" parent="." instance=ExtResource("1_paj5k")]
+
+[node name="Camera3D" parent="Player/Head" index="0"]
+cull_mask = 1048571
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 0)
@@ -19,3 +50,22 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_v0inr")
+
+[node name="MirrorContainer" parent="." instance=ExtResource("2_6lhiy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25864, -3.95627)
+resolution_per_unit = 2000
+MirrorColor = Color(0.980392, 0.937255, 0.956863, 1)
+
+[node name="MeshInstance3D" parent="MirrorContainer" index="1"]
+surface_material_override/0 = SubResource("ShaderMaterial_ws1ww")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.734472, 0.842968, 1.57011)
+layers = 4
+
+[node name="MirrorContainer2" parent="." instance=ExtResource("2_6lhiy")]
+transform = Transform3D(0.417449, -0.305778, 0.855708, 0.134068, 0.952103, 0.27482, -0.898756, 0, 0.43845, 3.53241, 1.34008, 0)
+resolution_per_unit = 2000
+
+[editable path="Player"]
+[editable path="MirrorContainer"]
